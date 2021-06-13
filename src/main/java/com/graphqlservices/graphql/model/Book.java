@@ -1,7 +1,9 @@
 package com.graphqlservices.graphql.model;
 
-import lombok.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
