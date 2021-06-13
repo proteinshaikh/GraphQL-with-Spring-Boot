@@ -2,12 +2,12 @@ schema {
 query: Query
 }
 
-query Query{
-allBooks: [Books]
+type Query{
+allBooks: [Book]
 book(id: String): Book
 }
 
-type book {
+type Book {
 isn: String
 title: String
 publisher: String
