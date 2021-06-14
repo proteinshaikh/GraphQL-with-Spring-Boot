@@ -5,6 +5,7 @@ schema {
 type Query {
     allBooks: [Book]
     book(id: String): Book
+    allStudent:[Student]
 }
 
 type Book {
@@ -13,4 +14,10 @@ type Book {
     publisher: String
     authors: [String]
     publishedDate: String
+}
+
+type Student{
+    id:String
+    name:String
+    address:String
 }

@@ -2,8 +2,11 @@ package com.graphqlservices.graphql.service;
 
 
 import com.graphqlservices.graphql.model.Book;
+import com.graphqlservices.graphql.model.Student;
 import com.graphqlservices.graphql.repository.BookRepository;
+import com.graphqlservices.graphql.repository.StudentRepository;
 import com.graphqlservices.graphql.service.datafetcher.AllBooksDataFetcher;
+import com.graphqlservices.graphql.service.datafetcher.AllStudentDataFetcher;
 import com.graphqlservices.graphql.service.datafetcher.BookDataFetcher;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -27,6 +30,9 @@ public class GraphqlService {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    StudentRepository studentRepository;
+
     @Value("classpath:books.graphql")
     Resource resource;
 
@@ -38,11 +44,15 @@ public class GraphqlService {
     @Autowired
     private BookDataFetcher bookDataFetcher;
 
+    @Autowired
+    private AllStudentDataFetcher allStudentDataFetcher;
+
     @PostConstruct
     private void loadSchema() throws IOException {
 
         //load books into book repository
         loadDataIntoHSQL();
+        loadDataIntoHSQLStudent();
         //get the schema
         File schemaFile = resource.getFile();
         //parse schema
@@ -64,12 +74,24 @@ public class GraphqlService {
             bookRepository.save(book);
         });
     }
+    private void loadDataIntoHSQLStudent() {
+
+        Stream.of(
+                new Student("1", "zee","pune"),
+                new Student("2", "pradeep","mum"),
+                new Student("3", "jagan","hyd")
+
+        ).forEach(student -> {
+            studentRepository.save(student);
+        });
+    }
 
     private RuntimeWiring buildRuntimeWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type("Query", typeWiring -> typeWiring
                         .dataFetcher("allBooks", allBooksDataFetcher)
-                        .dataFetcher("book", bookDataFetcher))
+                        .dataFetcher("book", bookDataFetcher)
+                        .dataFetcher("allStudent",allStudentDataFetcher ))
                 .build();
     }
 
